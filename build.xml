@@ -1,0 +1,78 @@
+<project name="bob-example"
+   xmlns:ivy="antlib:org.apache.ivy.ant"
+   default="package">
+
+   <presetdef name="javac">
+      <javac includeantruntime="false" />
+   </presetdef>
+
+   <include file="src/main/ivy/ivy-bootstrap.xml"/>
+
+   <target name="compile" depends="resolve">
+      <ivy:cachepath pathid="compile.classpath" conf="compile"/>
+
+      <mkdir dir="target/classes"/>
+      <javac debug="true" srcdir="src/main/java" destdir="target/classes" classpathref="compile.classpath"/>
+   </target>
+
+   <target name="deploy" depends="test,package,generate-pom">
+      <ivy:publish resolver="jboss-snapshots-repository"
+         overwrite="true"
+         publishivy="false">
+         <artifacts pattern="target/[artifact].[ext]"/>
+      </ivy:publish>
+   </target>
+
+   <target name="generate-pom" depends="resolve">
+      <ivy:deliver deliverpattern="target/ivy.xml"/>
+      <ivy:makepom
+         ivyfile="target/ivy.xml"
+         conf="compile,test"
+         pomfile="target/pom.xml"/>
+   </target>
+
+   <target name="package" depends="compile"
+      description="package the output directory into a jar file">
+      <jar destfile="target/bob-example.jar">
+         <fileset dir="target/classes"/>
+      </jar>
+   </target>
+
+   <target name="report" depends="resolve">
+      <mkdir dir="target/ivy/report"/>
+      <ivy:report todir="target/ivy/report"/>
+   </target>
+
+   <target name="resolve">
+      <ivy:resolve/>
+   </target>
+
+   <target name="test" depends="test-compile"
+      description="execute all tests">
+      <mkdir dir="target/reports"/>
+      <junit printsummary="true">
+         <classpath>
+            <pathelement path="target/classes"/>
+            <pathelement path="target/test-classes"/>
+            <path refid="test.classpath"/>
+         </classpath>
+         <formatter type="plain"/>
+         <formatter type="xml"/>
+         <batchtest todir="target/reports">
+            <fileset dir="src/test/java" includes="**/*Test*.java"/>
+         </batchtest>
+      </junit>
+   </target>
+
+   <target name="test-compile" depends="compile">
+      <ivy:cachepath pathid="ivy.test.classpath" conf="test"/>
+      <path id="test.classpath">
+         <pathelement location="target/classes"/>
+         <path refid="ivy.test.classpath"/>
+      </path>
+
+      <mkdir dir="target/test-classes"/>
+      <javac debug="true" srcdir="src/test/java" destdir="target/test-classes" classpathref="test.classpath"/>
+   </target>
+
+</project>

@@ -1,0 +1,5 @@
+<project name="jboss-ivy-bootstrap"
+   xmlns:ivy="antlib:org.apache.ivy.ant"
+   xmlns:ivyboot="antlib:org.apache.ivy.ant.bootstrap">
+
+</project>

@@ -1,0 +1,24 @@
+<ivysettings>
+    <typedef name="cache-resolver" classname="org.apache.ivy.plugins.resolver.CacheResolver"/>
+    <!--
+       Since resolutions results are shared by default switching chains does not result in the proper resolution.
+       Therefore we need an extra resolution cache.
+    -->
+    <caches>
+        <cache name="snapshots-cache" basedir="${user.home}/.ivy2/cache-snapshots"/>
+    </caches>
+    <resolvers>
+        <!-- set changPattern to indicate that resolution of SNAPSHOT should not be cached -->
+        <chain name="jboss-release" returnFirst="true" changingPattern=".*-SNAPSHOT">
+            <ibiblio name="jboss-releases-repository" m2compatible="true" root="https://repository.jboss.org/nexus/content/repositories/releases"/>
+            <ibiblio name="jboss-public-repository" m2compatible="true" root="https://repository.jboss.org/nexus/content/groups/public"/>
+        </chain>
+        <chain name="jboss-integration" returnFirst="true" cache="snapshots-cache">
+            <!-- we'll never find non-SNAPSHOTs in the snapshot repo, so lets get them out of the way first -->
+            <!-- if it is a dynamic version we should *not* pick it up out of the cache -->
+            <cache-resolver changingPattern="\[.*"/>
+            <ibiblio name="jboss-snapshots-repository" m2compatible="true" root="https://repository.jboss.org/nexus/content/repositories/snapshots" cache="snapshots-cache" checkmodified="true" changingPattern=".*-SNAPSHOT"/>
+            <resolver ref="jboss-release"/>
+        </chain>
+    </resolvers>
+</ivysettings>

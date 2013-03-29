@@ -1,0 +1,33 @@
+<project name="jboss-ivy-bootstrap"
+   xmlns:ivy="antlib:org.apache.ivy.ant"
+   xmlns:ivyboot="antlib:org.apache.ivy.ant.bootstrap">
+
+   <!-- Bootstrap Ivy -->
+   <property name="ivy.version" value="2.3.0"/>
+   <property name="ivy.dir" value="${user.home}/.ivy2/cache/org.apache.ivy/jars"/>
+   <property name="ivy.jar.name" value="ivy-${ivy.version}.jar"/>
+   <mkdir dir="${ivy.dir}"/>
+   <!-- skipexisting needs ant 1.8 -->
+   <get skipexisting="true" usetimestamp="true"
+      src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.version}/${ivy.jar.name}"
+      dest="${ivy.dir}/${ivy.jar.name}"/>
+   <taskdef
+      classpath="${ivy.dir}/${ivy.jar.name}"
+      uri="antlib:org.apache.ivy.ant.bootstrap"
+      resource="org/apache/ivy/ant/antlib.xml"/>
+   <!-- make sure we can get to repository.jboss.org -->
+   <!-- TODO: download ivysettings.xml (and other bits referenced) from somewhere -->
+   <ivyboot:settings
+      id="ivy.bootstrap.settings"
+      file="src/main/ivy/ivysettings.xml"/>
+   <!-- TODO: output from cachepath should be minimal -->
+   <ivyboot:cachepath
+      pathid="ivy-bootstrap.classpath"
+      conf="bootstrap"
+      log="download-only"
+      settingsRef="ivy.bootstrap.settings"/>
+   <taskdef
+      classpathref="ivy-bootstrap.classpath"
+      uri="antlib:org.apache.ivy.ant"
+      resource="org/apache/ivy/ant/antlib.xml"/>
+</project>
