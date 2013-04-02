@@ -4,7 +4,7 @@
 
    <!-- Bootstrap Ivy -->
    <property name="ivy.version" value="2.3.0"/>
-   <property name="ivy.dir" value="${user.home}/.ivy2/cache/org.apache.ivy/jars"/>
+   <property name="ivy.dir" value="${user.home}/.ivy2/cache/org.apache.ivy/ivy/jars"/>
    <property name="ivy.jar.name" value="ivy-${ivy.version}.jar"/>
    <mkdir dir="${ivy.dir}"/>
    <!-- skipexisting needs ant 1.8 -->
