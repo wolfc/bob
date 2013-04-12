@@ -1,0 +1,9 @@
+<metadata>
+    <groupId>org.jboss.bob</groupId>
+    <artifactId>bob-test-dependency</artifactId>
+    <versioning>
+        <versions>
+            <version>0.1-SNAPSHOT</version>
+        </versions>
+    </versioning>
+</metadata>

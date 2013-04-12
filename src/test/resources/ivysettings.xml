@@ -1,0 +1,15 @@
+<ivysettings>
+    <classpath file="${basedir}/target/classes"/>
+    <typedef name="ibiblio2" classname="org.jboss.bob.ivy.plugins.resolvers.IBiblio2Resolver"/>
+    <caches defaultCacheDir="${basedir}/target/test-cache"/>
+    <resolvers>
+        <ibiblio2 name="test-resolver" m2compatible="true" root="file:${basedir}/src/test/resources/test-repo"/>
+    </resolvers>
+    <settings defaultResolver="test-resolver"/>
+    <!--
+    <typedef name="maven-snapshot" classname="org.jboss.bob.ivy.plugins.version.MavenSnapshotMatcher"/>
+    <version-matchers usedefaults="true">
+        <maven-snapshot/>
+    </version-matchers>
+    -->
+</ivysettings>

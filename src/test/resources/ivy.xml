@@ -1,0 +1,13 @@
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
+    <info
+            organisation="org.jboss.bob"
+            module="bob-test"
+            revision="0.0-SNAPSHOT"/>
+    <configurations>
+        <conf name="test" visibility="private"/>
+    </configurations>
+    <dependencies>
+        <dependency org="org.jboss.bob" name="bob-test-dependency" rev="[0,)" conf="test->default"/>
+    </dependencies>
+</ivy-module>

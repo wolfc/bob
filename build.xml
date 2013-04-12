@@ -1,5 +1,6 @@
 <project name="bob"
          xmlns:ivy="antlib:org.apache.ivy.ant"
+         xmlns:ivytest="antlib:org.apache.ivy.ant.test"
          default="package">
 
     <presetdef name="javac">
@@ -75,4 +76,24 @@
         <javac debug="true" srcdir="src/test/java" destdir="target/test-classes" classpathref="test.classpath"/>
     </target>
 
+    <!-- an extra target that does a test resolve -->
+    <target name="test-resolve" depends="compile">
+        <taskdef
+                classpath="${ivy.dir}/${ivy.jar.name}"
+                uri="antlib:org.apache.ivy.ant.test"
+                resource="org/apache/ivy/ant/antlib.xml"/>
+        <ivytest:settings id="ivy.test.settings" file="src/test/resources/ivysettings.xml"/>
+        <ivytest:resolve
+                file="src/test/resources/ivy.xml"
+                settingsref="ivy.test.settings"/>
+        <!-- the rest is just smuck -->
+        <mkdir dir="target/test-resolve"/>
+        <ivytest:deliver
+                deliverpattern="target/test-resolve/ivy.xml"
+                settingsref="ivy.test.settings"/>
+        <ivytest:makepom
+                ivyfile="target/test-resolve/ivy.xml"
+                conf="compile,test"
+                pomfile="target/test-resolve/pom.xml"/>
+    </target>
 </project>

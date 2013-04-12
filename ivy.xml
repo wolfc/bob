@@ -2,7 +2,7 @@
    xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
    <info
       organisation="org.jboss.bob"
-      module="bob-example"
+      module="bob"
       revision="1.0-SNAPSHOT"/>
    <configurations>
       <!-- ensure that we retain the correct ivy version on publish -->
@@ -11,8 +11,7 @@
       <conf name="test" extends="compile" visibility="private"/>
    </configurations>
    <dependencies>
-      <dependency org="org.apache.ivy" name="ivy" rev="[2,)" conf="bootstrap->default,optional"/>
-      <dependency org="org.jboss" name="jboss-vfs" rev="[3.1,3.2)" conf="compile->default,sources"/>
+      <dependency org="org.apache.ivy" name="ivy" rev="[2,)" conf="bootstrap,compile->default,optional,sources"/>
       <dependency org="junit" name="junit" rev="[4,)" conf="test->default,sources"/>
    </dependencies>
 </ivy-module>

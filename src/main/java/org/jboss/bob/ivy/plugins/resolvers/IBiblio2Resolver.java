@@ -23,7 +23,11 @@ package org.jboss.bob.ivy.plugins.resolvers;
 
 import org.apache.ivy.core.IvyPatternHelper;
 import org.apache.ivy.core.module.descriptor.Artifact;
+import org.apache.ivy.core.module.descriptor.DependencyDescriptor;
+import org.apache.ivy.core.module.descriptor.ModuleDescriptor;
 import org.apache.ivy.core.module.id.ModuleRevisionId;
+import org.apache.ivy.core.resolve.ResolveData;
+import org.apache.ivy.core.resolve.ResolvedModuleRevision;
 import org.apache.ivy.plugins.repository.Repository;
 import org.apache.ivy.plugins.repository.Resource;
 import org.apache.ivy.plugins.resolver.IBiblioResolver;
@@ -36,6 +40,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -110,6 +115,11 @@ public class IBiblio2Resolver extends IBiblioResolver {
         return null;
     }
 
+    @Override
+    public String getTypeName() {
+        return "ibiblio2";
+    }
+
     private String getWholePattern() {
         return getRoot() + getPattern();
     }
@@ -180,6 +190,8 @@ public class IBiblio2Resolver extends IBiblioResolver {
                         String snapshotVersion = findSnapshotVersion(historicalMrid);
                         if (snapshotVersion != null) {
                             patternForRev = pattern.replaceFirst("\\-\\[revision\\]", "-" + snapshotVersion);
+                            // we want to use the timed snapshot rev
+                            rev = snapshotVersion;
                         }
                     }
                     String resolvedPattern = IvyPatternHelper.substitute(
@@ -204,6 +216,16 @@ public class IBiblio2Resolver extends IBiblioResolver {
         } else {
             return super.listResources(repository, mrid, pattern, artifact);
         }
+    }
+
+    @Override
+    public ResolvedModuleRevision parse(final ResolvedResource mdRef, final DependencyDescriptor dd, final ResolveData data) throws ParseException {
+        final ResolvedModuleRevision rmr = super.parse(mdRef, dd, data);
+        final ModuleDescriptor md = rmr.getDescriptor();
+        // the pom parser assumes that the pom will contain the resolved rev, which is not true for timed snapshots
+        // hence we override the resolved rev.
+        md.setResolvedModuleRevisionId(ModuleRevisionId.newInstance(md.getModuleRevisionId(), mdRef.getRevision()));
+        return rmr;
     }
 
     private boolean shouldUseMavenMetadata(String pattern) {
