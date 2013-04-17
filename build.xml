@@ -48,8 +48,9 @@
         <ivy:resolve/>
     </target>
 
+    <available property="tests.exist" file="src/test/java" type="dir"/>
     <target name="test" depends="test-compile"
-            description="execute all tests">
+            description="execute all tests" if="tests.exist">
         <mkdir dir="target/reports"/>
         <junit printsummary="true">
             <classpath>
@@ -65,7 +66,7 @@
         </junit>
     </target>
 
-    <target name="test-compile" depends="compile">
+    <target name="test-compile" depends="compile" if="tests.exist">
         <ivy:cachepath pathid="ivy.test.classpath" conf="test"/>
         <path id="test.classpath">
             <pathelement location="target/classes"/>
