@@ -34,7 +34,7 @@
 
     <target name="package" depends="compile"
             description="package the output directory into a jar file">
-        <jar destfile="target/bob-example.jar">
+        <jar destfile="target/${ivy.module}.jar">
             <fileset dir="target/classes"/>
         </jar>
     </target>
