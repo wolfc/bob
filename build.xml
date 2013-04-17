@@ -20,6 +20,7 @@
         <ivy:publish resolver="jboss-snapshots-repository"
                      overwrite="true"
                      publishivy="false">
+            <artifact name="${ivy.module}" type="pom" ext="pom"/>
             <artifacts pattern="target/[artifact].[ext]"/>
         </ivy:publish>
     </target>
@@ -29,7 +30,7 @@
         <ivy:makepom
                 ivyfile="target/ivy.xml"
                 conf="compile,test"
-                pomfile="target/pom.xml"/>
+                pomfile="target/${ivy.module}.pom"/>
     </target>
 
     <target name="package" depends="compile"

@@ -1,4 +1,5 @@
 <ivysettings>
+   <include file="${user.home}/.ivy2/ivysettings-credentials.xml"/>
    <!--
    <property name="ivy.cache.ttl.default" value="1h"/>
    -->
