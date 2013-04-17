@@ -3,7 +3,7 @@
    <info
       organisation="org.jboss.bob"
       module="bob"
-      revision="1.0-SNAPSHOT"/>
+      revision="0.1-SNAPSHOT"/>
    <configurations>
       <!-- ensure that we retain the correct ivy version on publish -->
       <conf name="bootstrap" visibility="private"/>
